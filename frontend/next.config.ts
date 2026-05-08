@@ -2,23 +2,14 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  images: {
-    remotePatterns: [
+  async rewrites() {
+    return [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8080',
-        pathname: '/uploads/**',
+        source: '/api/:path*',
+        // BACKEND_URL dibaca saat runtime, bukan saat build
+        destination: `${process.env.BACKEND_URL ?? 'http://localhost:3001'}/:path*`,
       },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    ]
   },
 }
 
